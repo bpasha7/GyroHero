@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>d6313af5-b70b-4ea2-b694-36e272cd49c5</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>Mob</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Database_Android.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Dto\Error.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)EmailReport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Menu.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Person.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)PriceInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RentEnd.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RentInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StartBackgroundTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)StatsPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)TimerTask.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UserPage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)UserSettings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="$(MSBuildThisFileDirectory)App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="$(MSBuildThisFileDirectory)Contents\" />
+    <Folder Include="$(MSBuildThisFileDirectory)Pages\" />
+  </ItemGroup>
+</Project>
