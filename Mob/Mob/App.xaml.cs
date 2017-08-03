@@ -1,25 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-//using Mob.Contents;
 using Xamarin.Forms;
 
 namespace Mob
 {
     public partial class App : Application
     {
+        #region Delegates
         public delegate void DoNotification(string title, string message);
-        public delegate bool DoAlert(string Title, string Message, string PositiveBtn, string NegativeBtn, string PositiveToast, string NegativeToast);
         public delegate void DoToast(string Satatment);
-        public delegate void DoProgress(bool run);
-        public delegate void ServiceManager(string Msg);
-        public static DoProgress Progress { get; set; }
-        public static DoNotification _doNotification;
-        public static DoAlert _doAlert;
+        #endregion
+        #region Private members
+        /// <summary>
+        /// SQLite Database repository
+        /// </summary>
+        private static Repository database;
+        /// <summary>
+        /// Main navigation page
+        /// </summary>
+        private NavigationPage _main;
+        /// <summary>
+        /// Function which do notification thoght MainActivity
+        /// </summary>
+        private static DoNotification _doNotification;
+        #endregion
+        #region Public members
+        /// <summary>
+        /// Toast
+        /// </summary>
         public static DoToast Toast;
+        /// <summary>
+        /// Send notifucation to user
+        /// </summary>
         public static string DoNotify
         {
             set
@@ -27,15 +38,9 @@ namespace Mob
                 _doNotification("GyroHero прокат", value);
             }
         }
-
-       // public static StoreRents()
-
-        public static Task MainTask { get; set; }
-
-        public static ServiceManager StartService;
-        public static ServiceManager StopService;
-
-        static Repository database;
+        /// <summary>
+        /// SQLite Database repository provider
+        /// </summary>
         public static Repository Database
         {
             get
@@ -48,19 +53,22 @@ namespace Mob
             }
 
         }
-
-        public App(DoNotification doNotification, DoAlert doAlert, DoToast doToast/*, DoProgress progress, ServiceManager start, ServiceManager stop*/)
+        #endregion
+        /// <summary>
+        /// Constuctor
+        /// </summary>
+        /// <param name="doNotification">Notification functions</param>
+        /// <param name="doToast">Toast function</param>
+        public App(DoNotification doNotification, DoToast doToast)
         {
             try
             {
-                
                 InitializeComponent();
                 _doNotification = doNotification;
-                _doAlert = doAlert;
                 Toast = doToast;
-                var main = new NavigationPage(new RentInfo(doNotification));
-                var master = new Menu(main);
-                master.Detail = main;
+                _main = new NavigationPage(new RentInfo(doNotification));
+                var master = new Menu(_main);
+                master.Detail = _main;
                 MainPage = master;
             }
             catch (Exception ex)
@@ -68,21 +76,13 @@ namespace Mob
                 _doNotification("GyroHero прокат", ex.Message);
             }
         }
-
-
+        /// <summary>
+        /// OnStart event
+        /// </summary>
         protected override void OnStart()
         {
             _doNotification("GyroHero прокат", "Привет, сегодня у нас будет много клиентов:)");
         }
 
-        protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-        }
-
-        protected override void OnResume()
-        {
-            // Handle when your app resumes
-        }
     }
 }

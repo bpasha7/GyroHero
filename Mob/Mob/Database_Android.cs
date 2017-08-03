@@ -55,6 +55,7 @@ namespace Mob
                 database.CreateTable<Rent>();
                 database.CreateTable<UserSettings>();
                 database.CreateTable<Error>();
+                database.CreateTable<StoredRent>();
                 CheckTable("");
             }
             catch(Exception)
@@ -77,6 +78,37 @@ namespace Mob
                 database.Insert(new PriceInfo { Name = "Весь день", Price = 700, Time = new TimeSpan(1, 0, 0, 0), Vehicle = "C" });
             }
         }
+        #region Stored rent
+        public List<StoredRent> GetStoredRents(string type)
+        {
+            lock (locker)
+            {
+                return (from i in database.Table<StoredRent>() where i.Type == type select i).ToList();
+            }
+        }
+        public int StoreRent(StoredRent item)
+        {
+            lock (locker)
+            {
+                if (item.Id != 0)
+                {
+                    database.Update(item);
+                    return item.Id;
+                }
+                else
+                {
+                    return database.Insert(item);
+                }
+            }
+        }
+        public void DeleteStoredRent(int id)
+        {
+            lock (locker)
+            {
+                database.Delete<StoredRent>(id);
+            }
+        }
+        #endregion
         #region Rent
         public List<Rent> GetRents(DateTime dateTime)
         {

@@ -10,7 +10,7 @@ namespace Mob
 {
     public class Person : ContentPage
     {
-        public delegate void RentManipulate(RentItem rentItem);
+        public delegate void RentManipulate(/*RentItem*/RentModel rentItem);
         public RentManipulate AddNewRentInfo { get; set; }
         #region Client controls
         private Entry _clientName;
@@ -84,7 +84,7 @@ namespace Mob
 
                         var currentPrice = _selectedPrice == null ? new PriceInfo { Name = "Без прайса", Id = -1, Time = _time.Time, Price = Convert.ToDecimal(_price.Text), Vehicle = _prices[0].Vehicle } : _selectedPrice;
                         var clientInfo = new ClientInfo { Name = _clientName.Text.TrimEnd(), Phone = _phoneNumber.Text, DocumentType = _selectedDocumentType, Number = _documentNumber.Text, Serial = _documentSerial.Text };
-                        AddNewRentInfo(new RentItem(clientInfo, currentPrice));
+                        AddNewRentInfo(new RentModel(clientInfo, currentPrice));
                         await Navigation.PopToRootAsync();
 
                     }

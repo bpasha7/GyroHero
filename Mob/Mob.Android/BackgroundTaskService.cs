@@ -14,14 +14,14 @@ using System.Threading;
 
 namespace Mob.Droid
 {
-    [Service/*(IsolatedProcess =true)*/]
+    [Service]
     public class BackgroundTaskService : Service
     {
         CancellationTokenSource _cts = new CancellationTokenSource();
 
         public override IBinder OnBind(Intent intent)
         {
-            return null;//throw new NotImplementedException();
+            return null;
         }
 
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
@@ -33,9 +33,8 @@ namespace Mob.Droid
                     PowerManager pm = (PowerManager)GetSystemService(Context.PowerService);
                     PowerManager.WakeLock wl = pm.NewWakeLock(WakeLockFlags.Partial, "My Tag");
                     wl.Acquire();
-                    //INVOKE THE SHARED CODE
                     var counter = new TimerTask();
-                    counter.RunTimer(_cts, startId/*, new TimeSpan(0), new TimeSpan(0), null, null*/).Wait();
+                    counter.RunTimer(_cts, startId).Wait();
                 }
                 catch (Exception ex)
                 {

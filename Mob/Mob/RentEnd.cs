@@ -13,7 +13,7 @@ namespace Mob
         Label _limit;
         Label _time;
         public Entry Extra;
-        public RentEnd(RentItem rentInfo)
+        public RentEnd(RentModel rentInfo)
         {
             this.Title = "Оформление доплаты";
 
