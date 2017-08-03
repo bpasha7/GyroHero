@@ -129,7 +129,7 @@ namespace Mob
             if (ans)
             {
                 _inProgress = false;
-                App.Database.DeleteStoredRent(StoredId);
+               // App.Database.DeleteStoredRent(StoredId);
                 return true;
             }
             return false;
@@ -255,6 +255,8 @@ namespace Mob
         public ICommand Remove { protected set; get; }
 
         public ICommand Complete { protected set; get; }
+
+        public ICommand Call { protected set; get; }
         #endregion
 
         private async Task<int> StoreRent()
@@ -268,6 +270,15 @@ namespace Mob
                 return App.Database.StoreRent(stored);              
             });
         }
+
+        public string GetRentInfo()
+        {
+            return $"{_rent.Client.Name}\n" +
+                         $"Документ: {_rent.Client.DocumentType} серия {_rent.Client.Serial} номер {_rent.Client.Number}\n" +
+                         $"Всего времени {_rent.RentPrice.Time}\n" +
+                         $"Внесено {_rent.RentPrice.Price:c}";
+        }
+
         public RentViewModel(RentModel rent, RentManipulate delete)
         {
             _rent = rent;
@@ -298,6 +309,23 @@ namespace Mob
                 {
                     App.Database.SaveError(new Error { Date = DateTime.Now, Invoker = $"{this.GetType().Name}->Remove", Message = ex.ToString() });
                 }
+            });
+            this.Call = new Command(() =>
+            {
+                if (_rent.Client.Phone == "")
+                {
+                    App.Toast("Номер отсутствует!");
+                    return;
+                }
+                //var ans = await _rent.Confirm($"Вызвать {item.ClientName}?");
+                //if (ans == true)
+                //{
+                Device.OpenUri(new Uri($"tel:{_rent.Client.Phone}"));
+                //}
+                //else
+                //{
+                //    App.Toast("Отмена");
+                //}
             });
             ///complete rent and remove
             this.Complete = new Command(async (nothing) =>
@@ -456,27 +484,8 @@ namespace Mob
                 _completeAction.SetBinding(MenuItem.CommandProperty, "Complete");
                 _completeAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
                 _callAction = new MenuItem { Icon = "phone.png", IsDestructive = true, Text = "Вызвать" };
+                _callAction.SetBinding(MenuItem.CommandProperty, "Call");
                 _callAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
-                _callAction.Clicked +=
-                    async (sender, e) =>
-                    {
-                        var mi = ((MenuItem)sender);
-                        var item = (RentModel)mi.CommandParameter;
-                        if (item.Client.Phone == "")
-                        {
-                            App.Toast("Номер отсутствует!");
-                            return;
-                        }
-                        var ans = await item.Confirm($"Вызвать {item.Client.Name}?");
-                        if (ans == true)
-                        {
-                            Device.OpenUri(new Uri($"tel:{item.Client.Phone}"));
-                        }
-                        else
-                        {
-                            App.Toast("Отмена");
-                        }
-                    };
                 _deleteAction = new MenuItem { Icon = "garbage.png", IsDestructive = true, Text = "Удалить" };
                 _deleteAction.SetBinding(MenuItem.CommandProperty, "Remove");
                 _deleteAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
@@ -759,11 +768,8 @@ namespace Mob
                 listView.ItemTemplate = new DataTemplate(typeof(RentView));
                 listView.ItemTapped += async (sender, e) =>
                 {
-                    RentModel item = (RentModel)e.Item;
-                    await DisplayAlert("Информация", $"{item.Client.Name}\n" +
-                        $"Документ: {item.Client.DocumentType} серия {item.Client.Serial} номер {item.Client.Number}\n" +
-                        $"Всего времени {item.RentPrice.Time}\n" +
-                        $"Внесено {item.RentPrice.Price:c}", "OK");
+                    RentViewModel item = (RentViewModel)e.Item;
+                    await DisplayAlert("Информация", item.GetRentInfo() ,"OK");
                     ((ListView)sender).SelectedItem = null;
                 };
                 ///==================================================
