@@ -24,7 +24,7 @@ namespace Mob
             };
             time.SetBinding(Label.TextProperty, new Binding("Time", stringFormat: "{0:HH:mm:ss}"));
             var money = new Label {  VerticalOptions = LayoutOptions.CenterAndExpand};
-            money.SetBinding(Label.TextProperty, new Binding("Payment", stringFormat: "{0:C0}"));
+            money.SetBinding(Label.TextProperty, new Binding("Payment", stringFormat: "{0}₽"));
             var type = new Label
             {
                 HorizontalOptions = LayoutOptions.FillAndExpand,
@@ -73,7 +73,7 @@ namespace Mob
                 _rentList.Add(new RentStringFormats(item));
                 sum += item.Payment;
             }
-            sumLbl.Text = $"Всего: {sum:c0}";
+            sumLbl.Text = $"Всего: {sum}₽";
             _reportImg.IsEnabled = true;
 
         }

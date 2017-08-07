@@ -9,21 +9,22 @@ using Xamarin.Forms;
 
 namespace Mob.Droid
 {
-    [Activity(Label = "GyroHero", Icon = "@drawable/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "GyroHero", Icon = "@drawable/icon", Theme = "@style/MainTheme"/*, MainLauncher = true*/, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         #region Private members
         private NotificationManager _notificationManager;
         private int notificationId = 0;
         private App _app;
+        private Intent _intent;
         #endregion
         /// <summary>
         /// Start background task
         /// </summary>
         void StartService()
         {
-            var intent = new Intent(this, typeof(BackgroundTaskService));
-            StartService(intent);
+            _intent = new Intent(this, typeof(BackgroundTaskService));
+            StartService(_intent);
         }
         /// <summary>
         /// Stop background task
@@ -32,8 +33,8 @@ namespace Mob.Droid
         {
             MessagingCenter.Subscribe<StopBackgroundTask>(this, "BackgroundTaskService", message =>
             {
-                var intent = new Intent(this, typeof(BackgroundTaskService));
-                StopService(intent);
+                _intent = new Intent(this, typeof(BackgroundTaskService));
+                StopService(_intent);
             });
         }
         /// <summary>
@@ -50,7 +51,10 @@ namespace Mob.Droid
         /// <param name="bundle">Bundle</param>
         protected override void OnCreate(Bundle bundle)
         {
+            //var splash = new SplashActivity(this);
             base.OnCreate(bundle);
+            //var splash = new SplashActivity();
+            //splash.WithFullScreen();
             ///Set Russian culture
             var userSelectedCulture = new CultureInfo("ru-RU");
             Thread.CurrentThread.CurrentCulture = userSelectedCulture;

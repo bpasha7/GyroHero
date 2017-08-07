@@ -2230,8 +2230,8 @@ namespace Mob.Droid
 			// aapt resource value: 0x7f0200aa
 			public const int Noti = 2130837674;
 			
-			// aapt resource value: 0x7f0200b9
-			public const int notification_template_icon_bg = 2130837689;
+			// aapt resource value: 0x7f0200ba
+			public const int notification_template_icon_bg = 2130837690;
 			
 			// aapt resource value: 0x7f0200ab
 			public const int p = 2130837675;
@@ -2258,22 +2258,25 @@ namespace Mob.Droid
 			public const int smartphone = 2130837682;
 			
 			// aapt resource value: 0x7f0200b3
-			public const int stop = 2130837683;
+			public const int splash = 2130837683;
 			
 			// aapt resource value: 0x7f0200b4
-			public const int thumb = 2130837684;
+			public const int stop = 2130837684;
 			
 			// aapt resource value: 0x7f0200b5
-			public const int time = 2130837685;
+			public const int thumb = 2130837685;
 			
 			// aapt resource value: 0x7f0200b6
-			public const int user = 2130837686;
+			public const int time = 2130837686;
 			
 			// aapt resource value: 0x7f0200b7
-			public const int user64 = 2130837687;
+			public const int user = 2130837687;
 			
 			// aapt resource value: 0x7f0200b8
-			public const int wheel = 2130837688;
+			public const int user64 = 2130837688;
+			
+			// aapt resource value: 0x7f0200b9
+			public const int wheel = 2130837689;
 			
 			static Drawable()
 			{
@@ -3600,6 +3603,9 @@ namespace Mob.Droid
 			
 			// aapt resource value: 0x7f0a0173
 			public const int MainTheme_Base = 2131362163;
+			
+			// aapt resource value: 0x7f0a0176
+			public const int MyTheme_Splash = 2131362166;
 			
 			// aapt resource value: 0x7f0a0032
 			public const int Platform_AppCompat = 2131361842;

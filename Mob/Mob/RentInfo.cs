@@ -113,6 +113,7 @@ namespace Mob
         /// has already notify about overtime?
         /// </summary>
         private bool isNotify = false;
+        private object _lock = new object();
         public bool _inProgress;
         /// <summary>
         /// Remove action
@@ -175,7 +176,7 @@ namespace Mob
             }
             App.Database.SaveRent(rent);
             App.Database.DeleteStoredRent(rent.Id);
-            App.Toast($"+{rent.Payment:c0}");
+            App.Toast($"+{rent.Payment}₽");
             return true;
         }
 
@@ -205,25 +206,28 @@ namespace Mob
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    _time = _time.Add(new TimeSpan(0, 0, 1));
+                    lock (_lock)
+                    {
+                        _time = _time.Add(new TimeSpan(0, 0, 1));
 
-                    if (_time > RentPrice.Time)
-                    {
-                        CurentTime.Color = Color.Red;
-                        CurentTime.Time = $"+{(_time - RentPrice.Time):T}";
-                        if (!isNotify)
+                        if (_time > RentPrice.Time)
                         {
-                            App.DoNotify = $"У {Client.Name} закончилось время!";
-                            isNotify = true;
+                            CurentTime.Color = Color.Red;
+                            CurentTime.Time = $"+{(_time - RentPrice.Time):T}";
+                            if (!isNotify)
+                            {
+                                App.DoNotify = $"У {Client.Name} закончилось время!";
+                                isNotify = true;
+                            }
                         }
+                        else
+                        {
+                            CurentTime.Color = Color.Green;
+                            CurentTime.Time = $"{(RentPrice.Time - _time):T}";
+                        }
+                        OnPropertyChange("Time");
+                        OnPropertyChange("TimeColor");
                     }
-                    else
-                    {
-                        CurentTime.Color = Color.Green;
-                        CurentTime.Time = $"{(RentPrice.Time - _time):T}";
-                    }
-                    OnPropertyChange("Time");
-                    OnPropertyChange("TimeColor");
                 });
             });
         }
