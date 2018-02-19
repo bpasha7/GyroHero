@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mob.Requests;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
@@ -83,6 +84,7 @@ namespace Mob
                     Opacity = 0.2,
                     Source = "edit.png",
                     HorizontalOptions = LayoutOptions.End,
+                    IsEnabled = _userSettings["UserName"] != null ? false : true,
                     VerticalOptions = LayoutOptions.Center
                 };
                 _userEditImg.GestureRecognizers.Add(new TapGestureRecognizer
@@ -242,6 +244,7 @@ namespace Mob
                     Opacity = 0.2,
                     Source = "edit.png",
                     HorizontalOptions = LayoutOptions.End,
+                    IsEnabled = _userSettings["Location"] != null ? false : true,
                     VerticalOptions = LayoutOptions.Center
                 };
                 _locationEditImg.GestureRecognizers.Add(new TapGestureRecognizer
@@ -294,12 +297,19 @@ namespace Mob
                 _resetImg = new Image { Source = "settings.png", Scale = 0.5 };
                 _resetButton = new Button
                 {
-                    Text = "Сбросить данные",
+                    Text = "Отправить данные",
                     TextColor = Color.Red,
                     BackgroundColor = Color.Transparent,
                     HorizontalOptions = LayoutOptions.FillAndExpand,
-                    IsEnabled = false,
+                    IsEnabled = (_userSettings["Location"]?.Vlaue != null && _userSettings["UserName"]?.Vlaue != null) ? true : false,
                     Opacity = 0.5
+                };
+                _resetButton.Clicked += async (s, e) =>
+                {
+                    if (_userSettings["Location"]?.Vlaue != null && _userSettings["UserName"]?.Vlaue != null)
+                    {
+                        GyroServer.SendUserData();
+                    }
                 };
                 var resetLayout = new StackLayout
                 {

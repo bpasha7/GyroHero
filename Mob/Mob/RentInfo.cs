@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -265,14 +266,20 @@ namespace Mob
 
         private async Task<int> StoreRent()
         {
-            return await Task.Run(() =>
+            return await Task.Run(async () =>
             {
                 var stored = new StoredRent();
                 stored.Rent = JsonConvert.SerializeObject(_rent);
                 stored.Date = DateTime.Now;
                 stored.Type = _rent.RentPrice.Vehicle;
+                
                 return App.Database.StoreRent(stored);              
             });
+        }
+
+        private async Task SendRentToServer()
+        {
+
         }
 
         public string GetRentInfo()
