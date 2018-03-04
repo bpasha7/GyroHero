@@ -1,4 +1,5 @@
 ﻿using Mob.Dto;
+using Mob.Requests;
 using Newtonsoft.Json;
 using SQLite;
 using System;
@@ -272,7 +273,7 @@ namespace Mob
                 stored.Rent = JsonConvert.SerializeObject(_rent);
                 stored.Date = DateTime.Now;
                 stored.Type = _rent.RentPrice.Vehicle;
-                
+                GyroServer.SendOrder(_rent);
                 return App.Database.StoreRent(stored);              
             });
         }
